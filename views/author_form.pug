@@ -1,0 +1,49 @@
+extends layout
+
+block content
+  nav(aria-label='breadcrumb')
+    ol.breadcrumb
+      li.breadcrumb-item
+        a(href='/authors') Authors
+      li.breadcrumb-item.active(aria-current='page')= title
+  
+  div.card
+    div.card-body.p-4
+      h1.mb-4= title
+      
+      form(method='POST' action='')
+        div.row
+          div.col-md-6
+            div.mb-3
+              label.form-label(for='first_name') First Name
+              input#first_name.form-control(type='text', name='first_name', value=(author ? author.first_name : ''), required=true, placeholder="First name")
+          
+          div.col-md-6
+            div.mb-3
+              label.form-label(for='last_name') Last Name
+              input#last_name.form-control(type='text', name='last_name', value=(author ? author.last_name : ''), required=true, placeholder="Last name")
+        
+        div.row
+          div.col-md-6
+            div.mb-3
+              label.form-label(for='date_of_birth') Date of Birth
+              input#date_of_birth.form-control(type='date', name='date_of_birth', value=(author && author.date_of_birth ? author.date_of_birth.toISOString().slice(0,10) : ''))
+          
+          div.col-md-6
+            div.mb-3
+              label.form-label(for='date_of_death') Date of Death
+              input#date_of_death.form-control(type='date', name='date_of_death', value=(author && author.date_of_death ? author.date_of_death.toISOString().slice(0,10) : ''))
+        
+        if errors
+          div.alert.alert-danger.mt-3
+            ul.mb-0
+              for error in errors
+                li!= error.msg
+        
+        div.mt-4
+          button.btn.btn-primary.me-2(type='submit') Save
+          a.btn.btn-outline-secondary(href='/authors') Cancel
+        
+        if author
+          div.mt-4
+            a.btn.btn-outline-danger(href=`/authors/${author._id}/delete`) Delete Author

@@ -1,0 +1,45 @@
+extends layout
+
+block content
+  nav(aria-label='breadcrumb')
+    ol.breadcrumb
+      li.breadcrumb-item
+        a(href='/authors') Authors
+      li.breadcrumb-item.active(aria-current='page')= author.name
+  
+  div.card.mb-4
+    div.card-body.p-4
+      div.row
+        div.col-md-8
+          h1.mb-3= author.name
+          if author.date_of_birth || author.date_of_death
+            p.text-muted.mb-4 #{author.lifespan}
+        
+        div.col-md-4
+          div.card.bg-light.text-center.p-4
+            svg.mx-auto.mb-3(xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" viewBox="0 0 16 16")
+              path(d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z")
+      
+      h4.mt-4.border-bottom.pb-2 Books by this author
+      
+      if author_books.length
+        div.row.mt-3
+          each book in author_books
+            div.col-md-6.mb-3
+              div.card.h-100
+                div.card-body
+                  h5.card-title
+                    a(href=`/books/${book._id}`)= book.title
+                  p.card-text= book.summary.length > 100 ? book.summary.substring(0, 100) + '...' : book.summary
+                  div.d-flex.justify-content-between.align-items-center.mt-3
+                    small.text-muted ISBN: #{book.isbn}
+                    if book.published_year
+                      small.text-muted #{book.published_year}
+      else
+        div.alert.alert-light.text-center.p-4.mt-3
+          p.mb-0 This author has no books in the library.
+      
+      div.mt-4.d-flex
+        a.btn.btn-primary.me-2(href='/authors') Back to Authors
+        a.btn.btn-outline-primary.me-2(href=`/authors/${author._id}/update`) Edit
+        a.btn.btn-outline-danger(href=`/authors/${author._id}/delete`) Delete

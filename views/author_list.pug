@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  div.d-flex.justify-content-between.align-items-center.mb-4
+    h2.m-0= title
+    a.btn.btn-secondary(href='/authors/create')
+      svg.me-2(xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16")
+        path(d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z")
+      | Add Author
+  
+  if authors.length
+    div.row
+      each author in authors
+        div.col-md-6.mb-4
+          div.card
+            div.card-body
+              div.d-flex.align-items-center
+                div.rounded-circle.bg-secondary.p-3.me-3
+                  svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 16 16")
+                    path(d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z")
+                div
+                  h4.card-title.mb-1
+                    a(href=`/authors/${author._id}`)= author.name
+                  if author.date_of_birth || author.date_of_death
+                    p.text-muted.mb-0= author.lifespan
+  else
+    div.card
+      div.card-body.text-center.p-5
+        p.lead.mb-3 There are no authors in the library yet.
+        a.btn.btn-secondary(href='/authors/create') Add the first author

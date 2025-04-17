@@ -1,0 +1,56 @@
+extends layout
+
+block content
+  nav(aria-label='breadcrumb')
+    ol.breadcrumb
+      li.breadcrumb-item
+        a(href='/books') Books
+      li.breadcrumb-item.active(aria-current='page')= title
+  
+  div.card
+    div.card-body.p-4
+      h1.mb-4= title
+      
+      form(method='POST' action='')
+        div.mb-3
+          label.form-label(for='title') Title
+          input#title.form-control(type='text', name='title', value=(book ? book.title : ''), required=true, placeholder="Enter book title")
+        
+        div.mb-3
+          label.form-label(for='author') Author
+          select#author.form-control(name='author', required=true)
+            option(value='') Select an author
+            for author in authors
+              if book && author._id.toString() === book.author.toString()
+                option(value=author._id, selected=true) #{author.name}
+              else
+                option(value=author._id) #{author.name}
+        
+        div.mb-3
+          label.form-label(for='summary') Summary
+          textarea#summary.form-control(name='summary', rows='4', required=true, placeholder="Brief description of the book") #{book ? book.summary : ''}
+        
+        div.row
+          div.col-md-6
+            div.mb-3
+              label.form-label(for='isbn') ISBN
+              input#isbn.form-control(type='text', name='isbn', value=(book ? book.isbn : ''), required=true, placeholder="ISBN-13 format")
+          
+          div.col-md-6
+            div.mb-3
+              label.form-label(for='published_year') Year Published
+              input#published_year.form-control(type='number', name='published_year', value=(book ? book.published_year : ''), placeholder="e.g. 2020")
+        
+        if errors
+          div.alert.alert-danger.mt-3
+            ul.mb-0
+              for error in errors
+                li!= error.msg
+        
+        div.mt-4
+          button.btn.btn-primary.me-2(type='submit') Save
+          a.btn.btn-outline-secondary(href='/books') Cancel
+        
+        if book
+          div.mt-4
+            a.btn.btn-outline-danger(href=`/books/${book._id}/delete`) Delete Book

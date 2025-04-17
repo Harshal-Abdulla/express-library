@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  div.d-flex.justify-content-between.align-items-center.mb-4
+    h2.m-0= title
+    a.btn.btn-primary(href='/books/create')
+      svg.me-2(xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16")
+        path(d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z")
+      | Add Book
+  
+  if books.length
+    div.row
+      each book in books
+        div.col-md-6.mb-4
+          div.card.h-100
+            div.card-body
+              h4.card-title.mb-3
+                a(href=`/books/${book._id}`)= book.title
+              p.card-subtitle.mb-2.text-muted
+                span By 
+                a(href=`/authors/${book.author._id}`)= book.author.name
+              p.card-text= book.summary.length > 120 ? book.summary.substring(0, 120) + '...' : book.summary
+              div.d-flex.justify-content-between.align-items-center.mt-3
+                small.text-muted ISBN: #{book.isbn}
+                if book.published_year
+                  small.text-muted #{book.published_year}
+  else
+    div.card
+      div.card-body.text-center.p-5
+        p.lead.mb-3 There are no books in the library yet.
+        a.btn.btn-primary(href='/books/create') Add the first book
